@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item;
 
-import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.item.dto.CreateUpdateItemDto;
 import ru.practicum.shareit.item.dto.GetItemDto;
 import ru.practicum.shareit.item.model.Item;

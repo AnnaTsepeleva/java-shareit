@@ -9,7 +9,7 @@ import ru.practicum.shareit.user.model.User;
  * TODO Sprint add-controllers.
  */
 @Data
-@Builder (toBuilder = true)
+@Builder(toBuilder = true)
 public class Item {
     private Long id;
     private String name;
@@ -17,6 +17,7 @@ public class Item {
     private Boolean available;
     private User owner;
     private ItemRequest request;
+
     public User getOwner() {
         return owner.toBuilder().build();
     }
