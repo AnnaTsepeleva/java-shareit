@@ -84,7 +84,8 @@ public class InMemoryItemStorageImpl implements ItemStorage {
     public List<Item> search(String text) {
         String lowerCaseText = text.toLowerCase();
 
-        return items.values().stream().filter(t -> (t.getName().toLowerCase().contains(lowerCaseText) || t.getDescription().toLowerCase().contains(lowerCaseText)) && t.getAvailable()).collect(Collectors.toList());
+        return items.values().stream().filter(t -> (t.getName().toLowerCase().contains(lowerCaseText) ||
+                t.getDescription().toLowerCase().contains(lowerCaseText)) && t.getAvailable()).collect(Collectors.toList());
     }
 
     private long getNewId() {
