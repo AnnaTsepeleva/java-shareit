@@ -1,7 +1,6 @@
 package ru.practicum.shareit.booking.model;
 
 import ru.practicum.shareit.exceptions.MethodArgumentException;
-import ru.practicum.shareit.exceptions.NotAvailableException;
 
 public enum State {
     ALL("all"),

@@ -15,7 +15,6 @@ import ru.practicum.shareit.booking.dto.CreateBookingDto;
 import ru.practicum.shareit.booking.dto.GetBookingDto;
 import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.marker.ToLog;
-import ru.practicum.shareit.validator.ValuesAllowedConstraint;
 
 import javax.validation.Valid;
 import java.util.List;
