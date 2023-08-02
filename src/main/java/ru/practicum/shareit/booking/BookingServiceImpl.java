@@ -33,14 +33,11 @@ public class BookingServiceImpl implements BookingService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<GetBookingDto> getUserBookings(long userId, String stateString) {
+    public List<GetBookingDto> getUserBookings(long userId, State state) {
         User user = userStorage.findById(userId).orElseThrow(
                 () -> new NotFoundException("Пользователь не найден")
         );
 
-        State state;
-
-        state = State.valueOf(stateString.toUpperCase());
         LocalDateTime currentMoment = LocalDateTime.now();
         List<Booking> bookings;
 
@@ -75,14 +72,10 @@ public class BookingServiceImpl implements BookingService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<GetBookingDto> getOwnerBookings(long userId, String stateString) {
+    public List<GetBookingDto> getOwnerBookings(long userId, State state) {
         User user = userStorage.findById(userId).orElseThrow(
                 () -> new NotFoundException("Пользователь не найден")
         );
-
-        State state;
-
-        state = State.valueOf(stateString.toUpperCase());
         LocalDateTime currentMoment = LocalDateTime.now();
         List<Booking> bookings;
 
@@ -176,19 +169,14 @@ public class BookingServiceImpl implements BookingService {
             throw new NotFoundException("Бронирование не найдено");
         }
 
-        Status status;
-
         if (approved) {
             if (booking.getStatus().equals(Status.APPROVED)) {
                 throw new NotAvailableException("Бронирование уже подтверждено");
             }
-            status = Status.APPROVED;
+            booking.setStatus(Status.APPROVED);
         } else {
-            status = Status.REJECTED;
+            booking.setStatus(Status.REJECTED);
         }
-
-        booking.setStatus(status);
-
         return BookingMapper.toGetBookingDtoFromBooking(bookingStorage.save(booking));
     }
 }

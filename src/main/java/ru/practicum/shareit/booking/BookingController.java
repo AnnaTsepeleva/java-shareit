@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.shareit.booking.dto.CreateBookingDto;
 import ru.practicum.shareit.booking.dto.GetBookingDto;
+import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.marker.ToLog;
 import ru.practicum.shareit.validator.ValuesAllowedConstraint;
 
@@ -31,30 +32,15 @@ public class BookingController {
 
     @GetMapping
     public List<GetBookingDto> getUserBookings(@RequestHeader(REQUEST_HEADER_USER_ID) long userId,
-                                               @ValuesAllowedConstraint(propName = "state",
-                                                       values = {"all",
-                                                               "current",
-                                                               "past",
-                                                               "future",
-                                                               "waiting",
-                                                               "rejected"},
-                                                       message = "Unknown state: UNSUPPORTED_STATUS")
                                                @RequestParam(defaultValue = "all") String state) {
-        return bookingService.getUserBookings(userId, state);
+
+        return bookingService.getUserBookings(userId, State.fromStringState(state));
     }
 
     @GetMapping("/owner")
     public List<GetBookingDto> getOwnerBookings(@RequestHeader(REQUEST_HEADER_USER_ID) long userId,
-                                                @ValuesAllowedConstraint(propName = "state",
-                                                        values = {"all",
-                                                                "current",
-                                                                "past",
-                                                                "future",
-                                                                "waiting",
-                                                                "rejected"},
-                                                        message = "Unknown state: UNSUPPORTED_STATUS")
                                                 @RequestParam(defaultValue = "all") String state) {
-        return bookingService.getOwnerBookings(userId, state);
+        return bookingService.getOwnerBookings(userId, State.fromStringState(state));
     }
 
     @GetMapping("/{bookingId}")
