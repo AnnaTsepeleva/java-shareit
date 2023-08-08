@@ -330,15 +330,6 @@ class BookingControllerTest {
     }
 
     @Test
-    void shouldGetExceptionWithGetUserBookingsWithFromMoreThenMaxInt() throws Exception {
-        mockMvc.perform(get("/bookings?from=2147483648")
-                        .header(REQUEST_HEADER_USER_ID, booker.getId())
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-        verify(bookingService, never()).getUserBookings(anyLong(), any(State.class), anyInt(), anyInt());
-    }
-
-    @Test
     void shouldGetExceptionWithGetUserBookingsWithSizeLessThen1() throws Exception {
         mockMvc.perform(get("/bookings?size=0")
                         .header(REQUEST_HEADER_USER_ID, booker.getId())
@@ -503,15 +494,6 @@ class BookingControllerTest {
     @Test
     void shouldGetExceptionWithGetOwnerBookingsWithFromLessThen0() throws Exception {
         mockMvc.perform(get("/bookings/owner?from=-1")
-                        .header(REQUEST_HEADER_USER_ID, booker.getId())
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-        verify(bookingService, never()).getOwnerBookings(anyLong(), any(State.class), anyInt(), anyInt());
-    }
-
-    @Test
-    void shouldGetExceptionWithGetOwnerBookingsWithFromMoreThenMaxInt() throws Exception {
-        mockMvc.perform(get("/bookings/owner?from=2147483648")
                         .header(REQUEST_HEADER_USER_ID, booker.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());

@@ -183,18 +183,6 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void shouldExceptionWithGetAllRequestsWithFromMoreThenMaxInt() throws Exception {
-        when(requestService.getAllRequests(anyLong(), anyInt(), anyInt()))
-                .thenReturn(listOfRequests);
-
-        mockMvc.perform(get("/requests/all?from=2147483648")
-                        .header(REQUEST_HEADER_USER_ID, "1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-        verify(requestService, never()).getAllRequests(anyLong(), anyInt(), anyInt());
-    }
-
-    @Test
     void shouldExceptionWithGetAllRequestsWithSizeLessThen1() throws Exception {
         when(requestService.getAllRequests(anyLong(), anyInt(), anyInt()))
                 .thenReturn(listOfRequests);

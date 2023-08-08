@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<GetUserDto> getAll(int from, int size) {
         Pageable pageable = new OffsetBasedPageRequest(from, size, SORT_BY_ID_ASC);
-        return userStorage.findAll(SORT_BY_ID_ASC)
+        return userStorage.findAll(pageable)
                 .stream()
                 .map(UserMapper::toGetUserDtoFromUser)
                 .collect(Collectors.toList());

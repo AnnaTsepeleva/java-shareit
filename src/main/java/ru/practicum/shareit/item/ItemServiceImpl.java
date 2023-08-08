@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.util.OffsetBasedPageRequest;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +30,7 @@ import java.util.stream.Collectors;
 import static ru.practicum.shareit.util.Constants.SORT_BY_ID_ASC;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional
 public class ItemServiceImpl implements ItemService {
@@ -47,9 +50,7 @@ public class ItemServiceImpl implements ItemService {
                     .map(ItemMapper::toGetItemWIthBookingDtoFromItem)
                     .collect(Collectors.toList());
         } else {
-            return items.stream()
-                    .map(ItemMapper::toGetItemDtoFromItem)
-                    .collect(Collectors.toList());
+            return new ArrayList<>();
         }
     }
 

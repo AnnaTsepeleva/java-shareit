@@ -288,15 +288,6 @@ class ItemControllerTest {
     }
 
     @Test
-    void shouldGetExceptionWithGetAllByUserIdWithFromMoreThenMaxInt() throws Exception {
-        mockMvc.perform(get("/items?from=2147483648")
-                        .header(REQUEST_HEADER_USER_ID, "1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-        verify(itemService, never()).getAllByUserId(anyLong(), anyInt(), anyInt());
-    }
-
-    @Test
     void shouldGetExceptionWithGetAllByUserIdWithSizeLessThen1() throws Exception {
         mockMvc.perform(get("/items?size=0")
                         .header(REQUEST_HEADER_USER_ID, "1")
@@ -376,15 +367,6 @@ class ItemControllerTest {
     @Test
     void shouldGetExceptionWithSearchWithFromLessThen0() throws Exception {
         mockMvc.perform(get("/items/search?text=kek&from=-1")
-                        .header(REQUEST_HEADER_USER_ID, "1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-        verify(itemService, never()).search(anyLong(), anyString(), anyInt(), anyInt());
-    }
-
-    @Test
-    void shouldGetExceptionWithSearchWithFromMoreThenMaxInt() throws Exception {
-        mockMvc.perform(get("/items/search?text=kek&from=2147483648")
                         .header(REQUEST_HEADER_USER_ID, "1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());

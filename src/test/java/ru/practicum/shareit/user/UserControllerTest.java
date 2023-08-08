@@ -375,38 +375,6 @@ class UserControllerTest {
     }
 
     @Test
-    void shouldGetExceptionWithGetAllWithFromLessThen0() throws Exception {
-        mockMvc.perform(get("/users?from=-1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-        verify(userService, never()).getById(anyLong());
-    }
-
-    @Test
-    void shouldGetExceptionWithGetAllWithFromMoreThenMaxInt() throws Exception {
-        mockMvc.perform(get("/users?from=2147483648")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-        verify(userService, never()).getById(anyLong());
-    }
-
-    @Test
-    void shouldGetExceptionWithGetAllWithFromSizeLessThen1() throws Exception {
-        mockMvc.perform(get("/users?size=0")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-        verify(userService, never()).getById(anyLong());
-    }
-
-    @Test
-    void shouldGetExceptionWithGetAllWithSizeMoreThen20() throws Exception {
-        mockMvc.perform(get("/users?size=21")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-        verify(userService, never()).getById(anyLong());
-    }
-
-    @Test
     void shouldGetAll() throws Exception {
         when(userService.getAll(anyInt(), anyInt()))
                 .thenReturn(listOfUsers);

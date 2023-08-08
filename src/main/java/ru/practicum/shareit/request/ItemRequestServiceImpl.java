@@ -1,6 +1,7 @@
 package ru.practicum.shareit.request;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 import static ru.practicum.shareit.util.Constants.SORT_BY_CREATED_DESC;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional
 public class ItemRequestServiceImpl implements ItemRequestService {
