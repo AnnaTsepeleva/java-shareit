@@ -10,10 +10,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.user.dto.CreateUpdateUserDto;
 import ru.practicum.shareit.user.dto.GetUserDto;
+import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -375,6 +377,38 @@ class UserControllerTest {
     }
 
     @Test
+    void shouldGetExceptionWithGetAllWithFromLessThen0() throws Exception {
+        mockMvc.perform(get("/users?from=-1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+        verify(userService, never()).getById(anyLong());
+    }
+
+    @Test
+    void shouldGetExceptionWithGetAllWithFromMoreThenMaxInt() throws Exception {
+        mockMvc.perform(get("/users?from=2147483648")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+        verify(userService, never()).getById(anyLong());
+    }
+
+    @Test
+    void shouldGetExceptionWithGetAllWithFromSizeLessThen1() throws Exception {
+        mockMvc.perform(get("/users?size=0")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+        verify(userService, never()).getById(anyLong());
+    }
+
+    @Test
+    void shouldGetExceptionWithGetAllWithSizeMoreThen20() throws Exception {
+        mockMvc.perform(get("/users?size=21")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+        verify(userService, never()).getById(anyLong());
+    }
+
+    @Test
     void shouldGetAll() throws Exception {
         when(userService.getAll(anyInt(), anyInt()))
                 .thenReturn(listOfUsers);
@@ -388,5 +422,15 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.[0].id").value(2L))
                 .andExpect(jsonPath("$.[19].id").value(21L));
         verify(userService, times(1)).getAll(anyInt(), anyInt());
+    }
+
+    @Test
+    void userMapperTest() throws Exception {
+        User user = UserMapper.toUserFromCreateUpdateUserDto(correctUser);
+        assertThat(user.getName()).isEqualTo(correctUser.getName());
+        assertThat(user.getEmail()).isEqualTo(correctUser.getEmail());
+        GetUserDto getUserDto1 = UserMapper.toGetUserDtoFromUser(user);
+        assertThat(getUserDto1.getName()).isEqualTo(user.getName());
+        assertThat(getUserDto1.getEmail()).isEqualTo(user.getEmail());
     }
 }

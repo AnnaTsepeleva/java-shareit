@@ -1,5 +1,7 @@
 package ru.practicum.shareit.util;
 
+import lombok.Generated;
+import lombok.experimental.UtilityClass;
 import org.springframework.data.domain.Sort;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.dto.GetCommentDto;
@@ -7,6 +9,8 @@ import ru.practicum.shareit.item.dto.GetCommentDto;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 
+@UtilityClass
+@Generated
 public class Constants {
     public static final String REQUEST_HEADER_USER_ID = "X-Sharer-User-Id";
 

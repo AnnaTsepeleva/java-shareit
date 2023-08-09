@@ -227,6 +227,36 @@ class ItemServiceImplTest {
     }
 
     @Test
+    void shouldUpdateItem() {
+        when(userStorage.findById(anyLong()))
+                .thenReturn(Optional.of(user));
+        when(requestStorage.findById(anyLong()))
+                .thenReturn(Optional.of(request));
+        when(commentStorage.findById(anyLong()))
+                .thenReturn(null);
+        when(itemStorage.findById(anyLong()))
+                .thenReturn(Optional.of(item.toBuilder().build()));
+        when(itemStorage.save(updatedItem))
+                .thenReturn(updatedItem);
+
+        GetItemDto itemDto = itemService.update(user.getId(), updatedItem.getId(), updateItemDto);
+
+        assertThat(itemDto)
+                .hasFieldOrPropertyWithValue("id", updatedItem.getId())
+                .hasFieldOrPropertyWithValue("name", updateItemDto.getName())
+                .hasFieldOrPropertyWithValue("description", updateItemDto.getDescription())
+                .hasFieldOrPropertyWithValue("requestId", 1L)
+                .hasFieldOrPropertyWithValue("lastBooking", null)
+                .hasFieldOrPropertyWithValue("nextBooking", null)
+                .hasFieldOrPropertyWithValue("comments", new TreeSet<>(orderByCreatedDesc));
+        verify(userStorage, times(1)).findById(anyLong());
+        verify(requestStorage, never()).findById(anyLong());
+        verify(commentStorage, never()).findById(anyLong());
+        verify(itemStorage, times(1)).findById(anyLong());
+        verify(itemStorage, times(1)).save(any(Item.class));
+    }
+
+    @Test
     void shouldGetExceptionWithUpdateItemWithNotFoundUser() {
         when(userStorage.findById(anyLong()))
                 .thenReturn(Optional.empty());

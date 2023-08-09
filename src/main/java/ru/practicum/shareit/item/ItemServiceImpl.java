@@ -119,7 +119,8 @@ public class ItemServiceImpl implements ItemService {
             item.setAvailable(updateItemDto.getAvailable());
         }
 
-        return ItemMapper.toGetItemDtoFromItem(itemStorage.save(item));
+        itemStorage.save(item);
+        return ItemMapper.toGetItemDtoFromItem(item);
     }
 
     @Override

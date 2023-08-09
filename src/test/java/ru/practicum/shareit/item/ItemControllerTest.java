@@ -8,14 +8,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shareit.item.dto.CreateCommentDto;
-import ru.practicum.shareit.item.dto.CreateUpdateItemDto;
-import ru.practicum.shareit.item.dto.GetCommentDto;
-import ru.practicum.shareit.item.dto.GetItemDto;
+import ru.practicum.shareit.booking.dto.GetItemBookingDto;
+import ru.practicum.shareit.item.dto.*;
+import ru.practicum.shareit.item.model.Item;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -288,6 +288,15 @@ class ItemControllerTest {
     }
 
     @Test
+    void shouldGetExceptionWithGetAllByUserIdWithFromMoreThenMaxInt() throws Exception {
+        mockMvc.perform(get("/items?from=2147483648")
+                        .header(REQUEST_HEADER_USER_ID, "1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+        verify(itemService, never()).getAllByUserId(anyLong(), anyInt(), anyInt());
+    }
+
+    @Test
     void shouldGetExceptionWithGetAllByUserIdWithSizeLessThen1() throws Exception {
         mockMvc.perform(get("/items?size=0")
                         .header(REQUEST_HEADER_USER_ID, "1")
@@ -374,6 +383,15 @@ class ItemControllerTest {
     }
 
     @Test
+    void shouldGetExceptionWithSearchWithFromMoreThenMaxInt() throws Exception {
+        mockMvc.perform(get("/items/search?text=kek&from=2147483648")
+                        .header(REQUEST_HEADER_USER_ID, "1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+        verify(itemService, never()).search(anyLong(), anyString(), anyInt(), anyInt());
+    }
+
+    @Test
     void shouldGetExceptionWithSearchWithSizeLessThen1() throws Exception {
         mockMvc.perform(get("/items/search?text=kek&size=0")
                         .header(REQUEST_HEADER_USER_ID, "1")
@@ -442,5 +460,15 @@ class ItemControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
         verify(itemService, times(1)).createComment(anyLong(), anyLong(), any(CreateCommentDto.class));
+    }
+
+    @Test
+    void itemMapperTest () throws  Exception {
+        Item item = ItemMapper.toItemFromCreateUpdateItemDto(correctItem);
+        assertThat(item.getName()).isEqualTo(correctItem.getName());
+        assertThat(item.getDescription()).isEqualTo(correctItem.getDescription());
+        assertThat(item.getAvailable()).isEqualTo(correctItem.getAvailable());
+        GetBookingForItemDto getBookingForItemDto = ItemMapper.toGetBookingDtoFromItem(item);
+        assertThat(getBookingForItemDto.getName()).isEqualTo(item.getName());
     }
 }

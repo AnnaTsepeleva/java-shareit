@@ -10,10 +10,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.request.dto.CreateItemRequestDto;
 import ru.practicum.shareit.request.dto.GetItemRequestDto;
+import ru.practicum.shareit.request.model.ItemRequest;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -183,6 +185,18 @@ class ItemRequestControllerTest {
     }
 
     @Test
+    void shouldExceptionWithGetAllRequestsWithFromMoreThenMaxInt() throws Exception {
+        when(requestService.getAllRequests(anyLong(), anyInt(), anyInt()))
+                .thenReturn(listOfRequests);
+
+        mockMvc.perform(get("/requests/all?from=2147483648")
+                        .header(REQUEST_HEADER_USER_ID, "1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+        verify(requestService, never()).getAllRequests(anyLong(), anyInt(), anyInt());
+    }
+
+    @Test
     void shouldExceptionWithGetAllRequestsWithSizeLessThen1() throws Exception {
         when(requestService.getAllRequests(anyLong(), anyInt(), anyInt()))
                 .thenReturn(listOfRequests);
@@ -247,5 +261,13 @@ class ItemRequestControllerTest {
                 .andExpect(jsonPath("$.id").value(getItemRequestDto.getId()))
                 .andExpect(jsonPath("$.description").value(getItemRequestDto.getDescription()));
         verify(requestService, times(1)).getRequestById(anyLong(), anyLong());
+    }
+
+    @Test
+    void itemRequestMapperTest () throws Exception {
+        ItemRequest itemRequest = ItemRequestMapper.toItemRequestFromCreateItemRequestDto(correctRequest);
+        assertThat(itemRequest.getDescription()).isEqualTo(correctRequest.getDescription());
+        GetItemRequestDto getItemRequestDto1 = ItemRequestMapper.toGetItemRequestDtoFromItemRequest(itemRequest);
+        assertThat(getItemRequestDto1.getDescription()).isEqualTo(itemRequest.getDescription());
     }
 }

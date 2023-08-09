@@ -10,16 +10,20 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.booking.dto.CreateBookingDto;
 import ru.practicum.shareit.booking.dto.GetBookingDto;
+import ru.practicum.shareit.booking.dto.GetItemBookingDto;
+import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.item.dto.GetBookingForItemDto;
 import ru.practicum.shareit.user.dto.GetBookingUserDto;
+import ru.practicum.shareit.user.model.User;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -213,6 +217,13 @@ class BookingControllerTest {
     }
 
     @Test
+    void bookingMapperTest() throws Exception {
+        Booking booking = BookingMapper.toBookingFromCreateBookingDto(createBookingDto);
+        assertThat(booking.getStartDate()).isEqualTo(getBookingDto.getStart().format(DATE_TIME_FORMATTER));
+        assertThat(booking.getEndDate()).isEqualTo(getBookingDto.getEnd().format(DATE_TIME_FORMATTER));
+    }
+
+    @Test
     void shouldGetExceptionWithApproveBookingWithoutHeader() throws Exception {
         mockMvc.perform(patch("/bookings/1")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -341,6 +352,24 @@ class BookingControllerTest {
     @Test
     void shouldGetExceptionWithGetUserBookingsWithSizeMoreThen20() throws Exception {
         mockMvc.perform(get("/bookings?size=21")
+                        .header(REQUEST_HEADER_USER_ID, booker.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+        verify(bookingService, never()).getUserBookings(anyLong(), any(State.class), anyInt(), anyInt());
+    }
+
+    @Test
+    void shouldGetExceptionWithGetOwnerBookingsWithFromMoreThenMaxInt() throws Exception {
+        mockMvc.perform(get("/bookings/owner?from=2147483648")
+                        .header(REQUEST_HEADER_USER_ID, booker.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+        verify(bookingService, never()).getOwnerBookings(anyLong(), any(State.class), anyInt(), anyInt());
+    }
+
+    @Test
+    void shouldGetExceptionWithGetUserBookingsWithFromMoreThenMaxInt() throws Exception {
+        mockMvc.perform(get("/bookings?from=2147483648")
                         .header(REQUEST_HEADER_USER_ID, booker.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
