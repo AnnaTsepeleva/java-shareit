@@ -8,7 +8,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shareit.booking.dto.GetItemBookingDto;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.model.Item;
 
@@ -463,7 +462,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void itemMapperTest () throws  Exception {
+    void itemMapperTest() throws  Exception {
         Item item = ItemMapper.toItemFromCreateUpdateItemDto(correctItem);
         assertThat(item.getName()).isEqualTo(correctItem.getName());
         assertThat(item.getDescription()).isEqualTo(correctItem.getDescription());

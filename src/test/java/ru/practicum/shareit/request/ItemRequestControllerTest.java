@@ -264,7 +264,7 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void itemRequestMapperTest () throws Exception {
+    void itemRequestMapperTest() throws Exception {
         ItemRequest itemRequest = ItemRequestMapper.toItemRequestFromCreateItemRequestDto(correctRequest);
         assertThat(itemRequest.getDescription()).isEqualTo(correctRequest.getDescription());
         GetItemRequestDto getItemRequestDto1 = ItemRequestMapper.toGetItemRequestDtoFromItemRequest(itemRequest);
