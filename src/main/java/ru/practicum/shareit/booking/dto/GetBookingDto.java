@@ -2,6 +2,7 @@ package ru.practicum.shareit.booking.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.item.dto.GetBookingForItemDto;
 import ru.practicum.shareit.user.dto.GetBookingUserDto;
@@ -9,7 +10,8 @@ import ru.practicum.shareit.user.dto.GetBookingUserDto;
 import java.time.LocalDateTime;
 
 @Data
-@Builder
+@Builder(toBuilder = true)
+@EqualsAndHashCode
 public class GetBookingDto {
     private Long id;
     private LocalDateTime start;

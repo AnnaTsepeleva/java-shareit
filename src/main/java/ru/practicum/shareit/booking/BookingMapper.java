@@ -17,7 +17,7 @@ public class BookingMapper {
                 .build();
     }
 
-    public GetItemBookingDto toGetItemBookingDtoFromBooking(Booking booking) {
+    public GetItemBookingDto toGetBookingForItemDtoFromBooking(Booking booking) {
         if (booking == null) {
             return null;
         }
