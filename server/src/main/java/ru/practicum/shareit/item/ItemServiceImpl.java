@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.exceptions.MethodArgumentException;
+import ru.practicum.shareit.exception.MthdArgumentException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.item.dto.CreateCommentDto;
 import ru.practicum.shareit.item.dto.CreateUpdateItemDto;
@@ -13,8 +13,6 @@ import ru.practicum.shareit.item.dto.GetCommentDto;
 import ru.practicum.shareit.item.dto.GetItemDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.CommentMapper;
-import ru.practicum.shareit.item.ItemMapper;
 import ru.practicum.shareit.request.ItemRequestStorage;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.UserStorage;
@@ -181,7 +179,7 @@ public class ItemServiceImpl implements ItemService {
 
             return CommentMapper.toGetCommentDtoFromComment(commentStorage.save(comment));
         } else {
-            throw new MethodArgumentException(String.format(
+            throw new MthdArgumentException(String.format(
                     "Пользователь с ID = %s не брал в аренду вещь с ID = %s", userId, itemId));
         }
     }

@@ -75,7 +75,7 @@ public class ErrorHandler {
 
     @ExceptionHandler({
             MethodArgumentTypeMismatchException.class,
-            MethodArgumentException.class,
+            MthdArgumentException.class,
             ValidationException.class,
             NotAvailableException.class,
             NotValidDateException.class})
