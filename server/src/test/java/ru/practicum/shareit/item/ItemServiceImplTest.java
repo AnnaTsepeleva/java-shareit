@@ -9,7 +9,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
-import ru.practicum.shareit.exceptions.MethodArgumentException;
+import ru.practicum.shareit.exception.MthdArgumentException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.item.dto.CreateCommentDto;
 import ru.practicum.shareit.item.dto.CreateUpdateItemDto;
@@ -645,8 +645,8 @@ class ItemServiceImplTest {
         when(commentStorage.save(any(Comment.class)))
                 .thenReturn(comment);
 
-        final MethodArgumentException exception = Assertions.assertThrows(
-                MethodArgumentException.class,
+        final MthdArgumentException exception = Assertions.assertThrows(
+                MthdArgumentException.class,
                 () -> itemService.createComment(2L, 1L, createCommentDto)
         );
 
