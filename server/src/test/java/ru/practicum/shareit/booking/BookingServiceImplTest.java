@@ -535,7 +535,7 @@ class BookingServiceImplTest {
         when(bookingStorage.findAllByBookerAndStatus(any(User.class), any(Status.class), any(Pageable.class)))
                 .thenReturn(listOfBookings);
 
-        List<GetBookingDto> bookings = bookingService.getUserBookings(1L, State.FUTURE, 1, 5);
+        List<GetBookingDto> bookings = bookingService.getUserBookings(1L, State.WAITING, 1, 5);
 
         assertThat(bookings)
                 .isNotEmpty()

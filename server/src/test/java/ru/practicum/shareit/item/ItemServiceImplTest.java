@@ -9,7 +9,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
-import ru.practicum.shareit.exception.MethodArgumentException;
+import ru.practicum.shareit.exceptions.MethodArgumentException;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.item.dto.CreateCommentDto;
 import ru.practicum.shareit.item.dto.CreateUpdateItemDto;
