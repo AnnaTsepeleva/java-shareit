@@ -43,7 +43,6 @@
 	<modules>
 		<module>api</module>
 		<module>util</module>
-		<module>server</module>
 		<module>gateway</module>
 		<module>server</module>
 	</modules>
